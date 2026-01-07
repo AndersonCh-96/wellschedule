@@ -8,10 +8,11 @@ import { Room } from 'src/room/entities/room.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
+import { ReservationGateway } from './reservation.gateway';
 
 @Module({
   controllers: [ReservationController],
-  providers: [ReservationService],
+  providers: [ReservationService,ReservationGateway],
   imports: [TypeOrmModule.forFeature([Reservation, Room, User]), AuthModule],
 })
 export class ReservationModule { }

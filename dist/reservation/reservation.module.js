@@ -15,13 +15,14 @@ const reservation_entity_1 = require("./entities/reservation.entity");
 const room_entity_1 = require("../room/entities/room.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
 const auth_module_1 = require("../auth/auth.module");
+const reservation_gateway_1 = require("./reservation.gateway");
 let ReservationModule = class ReservationModule {
 };
 exports.ReservationModule = ReservationModule;
 exports.ReservationModule = ReservationModule = __decorate([
     (0, common_1.Module)({
         controllers: [reservation_controller_1.ReservationController],
-        providers: [reservation_service_1.ReservationService],
+        providers: [reservation_service_1.ReservationService, reservation_gateway_1.ReservationGateway],
         imports: [typeorm_1.TypeOrmModule.forFeature([reservation_entity_1.Reservation, room_entity_1.Room, user_entity_1.User]), auth_module_1.AuthModule],
     })
 ], ReservationModule);

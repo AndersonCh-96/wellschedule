@@ -19,14 +19,17 @@ const reservation_entity_1 = require("./entities/reservation.entity");
 const Repository_1 = require("typeorm/repository/Repository");
 const room_entity_1 = require("../room/entities/room.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
+const reservation_gateway_1 = require("./reservation.gateway");
 let ReservationService = class ReservationService {
     reservationRepository;
     roomRepository;
     userRepository;
-    constructor(reservationRepository, roomRepository, userRepository) {
+    reservationGateway;
+    constructor(reservationRepository, roomRepository, userRepository, reservationGateway) {
         this.reservationRepository = reservationRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
+        this.reservationGateway = reservationGateway;
     }
     async create(createReservationDto, userLogin) {
         const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
@@ -45,7 +48,9 @@ let ReservationService = class ReservationService {
             room,
             user,
         });
-        return this.reservationRepository.save(reservation);
+        const saveReservation = await this.reservationRepository.save(reservation);
+        this.reservationGateway.emitCreated(saveReservation);
+        return saveReservation;
     }
     async findAll(start, end) {
         const queryB = this.reservationRepository
@@ -92,7 +97,11 @@ let ReservationService = class ReservationService {
         if (reservation.user.id !== userLogin.id) {
             throw new common_1.ForbiddenException('No tienes permiso para eliminar esta reservación');
         }
-        return this.reservationRepository.delete(reservation.id);
+        await this.reservationRepository.delete(reservation.id);
+        this.reservationGateway.emitDeleted(id);
+        return {
+            message: 'Reservación eliminada correctamente'
+        };
     }
 };
 exports.ReservationService = ReservationService;
@@ -103,6 +112,7 @@ exports.ReservationService = ReservationService = __decorate([
     __param(2, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [Repository_1.Repository,
         Repository_1.Repository,
-        Repository_1.Repository])
+        Repository_1.Repository,
+        reservation_gateway_1.ReservationGateway])
 ], ReservationService);
 //# sourceMappingURL=reservation.service.js.map

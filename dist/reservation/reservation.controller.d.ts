@@ -11,5 +11,7 @@ export declare class ReservationController {
     }>;
     findOne(id: string): Promise<import("./entities/reservation.entity").Reservation>;
     update(id: string, updateReservationDto: UpdateReservationDto): Promise<import("./entities/reservation.entity").Reservation>;
-    remove(id: string, user: User): Promise<import("typeorm").DeleteResult>;
+    remove(id: string, user: User): Promise<{
+        message: string;
+    }>;
 }

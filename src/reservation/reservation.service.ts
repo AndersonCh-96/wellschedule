@@ -7,6 +7,7 @@ import { Repository } from 'typeorm/repository/Repository';
 import { Room } from 'src/room/entities/room.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { Between } from 'typeorm';
+import { ReservationGateway } from './reservation.gateway';
 
 @Injectable()
 export class ReservationService {
@@ -17,12 +18,11 @@ export class ReservationService {
     private readonly roomRepository: Repository<Room>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly reservationGateway: ReservationGateway,
   ) {
 
   }
   async create(createReservationDto: CreateReservationDto, userLogin: User) {
-
-
     const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
     if (!room) {
       throw new NotFoundException('Sala no encontrada');
@@ -42,7 +42,10 @@ export class ReservationService {
     });
 
 
-    return this.reservationRepository.save(reservation);
+
+    const saveReservation = await this.reservationRepository.save(reservation);
+    this.reservationGateway.emitCreated(saveReservation);
+    return saveReservation;
 
 
   }
@@ -112,11 +115,14 @@ export class ReservationService {
       throw new NotFoundException('Reservación no encontrada');
     }
 
-
-
     if (reservation.user.id !== userLogin.id) {
       throw new ForbiddenException('No tienes permiso para eliminar esta reservación');
     }
-    return this.reservationRepository.delete(reservation.id);
+    await this.reservationRepository.delete(reservation.id);
+    this.reservationGateway.emitDeleted(id)
+
+    return {
+      message: 'Reservación eliminada correctamente'
+    }
   }
 }
