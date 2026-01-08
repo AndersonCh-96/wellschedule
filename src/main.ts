@@ -12,7 +12,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
-  app.enableCors();
+  app.enableCors({
+    origin: "*",
+    credentials: true,
+  });
   app.useStaticAssets(join(__dirname, "..", "static"), {
     prefix: "/api/static",
   });
