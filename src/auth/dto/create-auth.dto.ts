@@ -3,6 +3,7 @@ import {
   IsArray,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MinLength,
 } from "class-validator";
@@ -12,6 +13,10 @@ export class CreateAuthDto {
   @IsEmail()
   @IsNotEmpty()
   email!: string;
+
+  @IsString()
+  @IsOptional()
+  name?: string;
 
   @IsNotEmpty()
   @IsString()
