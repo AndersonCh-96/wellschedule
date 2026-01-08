@@ -18,11 +18,13 @@ import { WebsocketModule } from './websocket/websocket.module';
       type: "postgres",
       // url: process.env.DATABASE_URL,
 
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "the_wellness.group2024",
-      database: "pruebas",
+      url: 'postgresql://neondb_owner:npg_h76wgJRuezIL@ep-odd-cake-ahnd3zr7-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+
+      // host: "localhost",
+      // port: 5432,
+      // username: "postgres",
+      // password: "the_wellness.group2024",
+      // database: "pruebas",
       autoLoadEntities: true,
       synchronize: true,
       // ssl: { rejectUnauthorized: false },
