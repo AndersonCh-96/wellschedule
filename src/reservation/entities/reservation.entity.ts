@@ -8,7 +8,7 @@ export class Reservation {
   id: string;
   @Column({ type: "text", nullable: true })
   title: string;
-  @Column("timestamp without time zone", { nullable: false })
+  @Column("timestamp", { nullable: false })
   startDate: string;
   @Column("time", { nullable: false })
   endDate: string;
