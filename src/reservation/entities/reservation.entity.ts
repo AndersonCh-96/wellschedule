@@ -6,10 +6,10 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class Reservation {
   @PrimaryGeneratedColumn("uuid")
   id: string;
-  @Column({ type: "text", nullable:true })
+  @Column({ type: "text", nullable: true })
   title: string;
-  @Column("timestamp", { nullable: false })
-  startDate: Date;
+  @Column("timestamp without time zone", { nullable: false })
+  startDate: string;
   @Column("time", { nullable: false })
   endDate: string;
   @Column("text", { nullable: true })
