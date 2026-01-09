@@ -127,7 +127,7 @@ export class AuthService {
 
     const [data, total] = await qb.getManyAndCount();
 
-    // Si hay paginación, retorna con metadata, sino solo los datos
+   
     if (page && limit) {
       return {
         data,
