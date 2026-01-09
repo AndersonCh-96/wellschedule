@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateAuthDto } from "./dto/create-auth.dto";
@@ -15,6 +16,7 @@ import { LoginUserDTO } from "./dto/login-user.dto";
 
 import { ValidRoles } from "./interfaces/valid-roles";
 import { Auth } from "./decorators/auth-decorator";
+import { PaginationUserDto } from "./dto/paginatio.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -89,8 +91,8 @@ export class AuthController {
   // }
 
   @Get("user")
-  findAll() {
-    return this.authService.findAll();
+  findAll(@Query() query: PaginationUserDto) {
+    return this.authService.findAll(query);
   }
 
   @Get(":id")

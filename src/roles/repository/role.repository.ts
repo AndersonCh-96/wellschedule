@@ -39,7 +39,7 @@ export class RoleRepository {
     async findAll({ page, limit }: PaginationDto) {
         const qb = this.roleRepository.createQueryBuilder("role").
             orderBy("role.name", "ASC");
-            
+
         if (page && limit) {
             qb.skip((page - 1) * limit).take(limit);
 

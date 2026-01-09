@@ -16,6 +16,7 @@ import * as bcrypt from "bcrypt";
 import { LoginUserDTO } from "./dto/login-user.dto";
 import { JwtService } from "@nestjs/jwt";
 import { JwPayload } from "./interfaces/jwt.interface";
+import { PaginationUserDto } from "./dto/paginatio.dto";
 
 @Injectable()
 export class AuthService {
@@ -112,8 +113,34 @@ export class AuthService {
     }
   }
 
-  async findAll() {
-    return await this.userRepository.find({ relations: ["roles"] });
+  async findAll({ page, limit, search }: PaginationUserDto) {
+
+    const qb = this.userRepository.createQueryBuilder("user").
+      leftJoinAndSelect("user.roles", "role").orderBy("user.name", "ASC");
+
+    if (page && limit) {
+      qb.skip((page - 1) * limit).take(limit);
+    }
+    if (search) {
+      qb.andWhere("user.name ILIKE :search OR user.email ILIKE :search", { search: `%${search}%` });
+    }
+
+    const [data, total] = await qb.getManyAndCount();
+
+    // Si hay paginación, retorna con metadata, sino solo los datos
+    if (page && limit) {
+      return {
+        data,
+        meta: {
+          total,
+          page,
+          pageSize: limit,
+          pageCount: Math.ceil(total / limit)
+        }
+      }
+    }
+
+    return data;
   }
 
   findOne(id: number) {
@@ -134,6 +161,11 @@ export class AuthService {
         throw new NotFoundException("Roles no encontrados");
       }
     }
+
+    if (rest.password) {
+      rest.password = bcrypt.hashSync(rest.password, 10);
+    }
+
 
     const updatedUser = await this.userRepository.preload({
       id,
