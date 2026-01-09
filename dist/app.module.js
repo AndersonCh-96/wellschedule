@@ -27,7 +27,11 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
-                url: "postgresql://neondb_owner:npg_h76wgJRuezIL@ep-odd-cake-ahnd3zr7-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+                host: "localhost",
+                port: 5432,
+                username: "postgres",
+                password: "the_wellness.group2024",
+                database: "pruebas",
                 autoLoadEntities: true,
                 synchronize: true,
                 logging: false,

@@ -6,7 +6,7 @@ export class CreateReservationDto {
     @IsNotEmpty()
     title: string;
 
-    @IsDateString()
+    @IsString()
     @IsNotEmpty()
     startDate?: string;
 
