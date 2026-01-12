@@ -8,10 +8,10 @@ export class Reservation {
   id: string;
   @Column({ type: "text", nullable: true })
   title: string;
-  @Column("timestamp", { nullable: false })
-  startDate: string;
-  @Column("timestamp", { nullable: false })
-  endDate: string;
+  @Column("timestamptz", { nullable: false })
+  startDate: Date;
+  @Column("timestamptz", { nullable: false })
+  endDate: Date;
   @Column("text", { nullable: true })
   description: string;
   @Column("boolean", { nullable: false, default: true })
