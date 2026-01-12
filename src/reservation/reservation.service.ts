@@ -6,7 +6,7 @@ import { Reservation } from './entities/reservation.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import { Room } from 'src/room/entities/room.entity';
 import { User } from 'src/auth/entities/user.entity';
-import { Between } from 'typeorm';
+import { Between, LessThan, MoreThan } from 'typeorm';
 import { ReservationGateway } from './reservation.gateway';
 
 @Injectable()
@@ -32,6 +32,19 @@ export class ReservationService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
+
+    const conflictRoom = this.reservationRepository.createQueryBuilder('reservation')
+      .where('reservation.roomId =:roomId', { roomId: createReservationDto.roomId })
+      .andWhere('reservation.startDate < :endDate AND reservation.endDate > :startDate', {
+        endDate: createReservationDto.endDate,
+        startDate: createReservationDto.startDate
+      })
+    const conflict = await conflictRoom.getOne();
+    if (conflict) {
+      throw new ForbiddenException('Sala no disponible en el horario seleccionado');
+    }
+    
+
     const reservation = this.reservationRepository.create({
       title: createReservationDto.title,
       startDate: createReservationDto.startDate,
@@ -41,25 +54,11 @@ export class ReservationService {
       user,
     });
 
-
-
     const saveReservation = await this.reservationRepository.save(reservation);
     this.reservationGateway.emitCreated(saveReservation);
     return saveReservation;
-
-
   }
 
-  //revisar para el front fullCalendar 
-  //   <FullCalendar
-  //   events={(info, successCallback) => {
-  //     fetch(
-  //       `/agendamientos?start=${info.startStr}&end=${info.endStr}`
-  //     )
-  //       .then(res => res.json())
-  //       .then(data => successCallback(data));
-  //   }}
-  // />
 
   async findAll(start?: string, end?: string) {
     const queryB = this.reservationRepository

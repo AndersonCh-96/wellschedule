@@ -36,7 +36,7 @@ let AuthController = class AuthController {
         return this.authService.findAll(query);
     }
     findOne(id) {
-        return this.authService.findOne(+id);
+        return this.authService.findOne(id);
     }
     update(id, updateAuthDto) {
         return this.authService.update(id, updateAuthDto);
@@ -68,7 +68,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(":id"),
+    (0, common_1.Get)("user/:id"),
     (0, auth_decorator_1.Auth)(valid_roles_1.ValidRoles.admin, valid_roles_1.ValidRoles.user),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
@@ -77,7 +77,6 @@ __decorate([
 ], AuthController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)("user/:id"),
-    (0, auth_decorator_1.Auth)(valid_roles_1.ValidRoles.admin, valid_roles_1.ValidRoles.user),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -86,7 +85,6 @@ __decorate([
 ], AuthController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)("user/:id"),
-    (0, auth_decorator_1.Auth)(valid_roles_1.ValidRoles.admin, valid_roles_1.ValidRoles.user),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

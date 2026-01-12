@@ -8,6 +8,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -19,9 +20,11 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Index()
   @Column("text", { nullable: false, unique: true })
   email: string;
 
+  @Index()
   @Column("text", { nullable: true, })
   name: string;
 

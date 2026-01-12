@@ -8,7 +8,7 @@ export class CreateReservationDto {
 
     @IsString()
     @IsNotEmpty()
-    startDate?: string;
+    startDate: string;
 
     // @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
     @IsNotEmpty()

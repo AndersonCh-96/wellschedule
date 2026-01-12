@@ -27,7 +27,7 @@ export declare class AuthController {
             pageCount: number;
         };
     }>;
-    findOne(id: string): string;
+    findOne(id: string): Promise<import("./entities/user.entity").User>;
     update(id: string, updateAuthDto: UpdateAuthDto): Promise<import("./entities/user.entity").User>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
 }

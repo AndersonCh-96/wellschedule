@@ -88,15 +88,15 @@ export class AuthService {
   }
 
   async create(createAuthDto: CreateAuthDto) {
+
+
     try {
       const { password, roles, ...rest } = createAuthDto;
 
-      console.log(roles);
       const existRole = await this.roleRepository.find({
         where: { name: In(roles) },
       });
 
-      console.log("hay", existRole);
       if (existRole.length === 0) {
         throw new NotFoundException("Rol no encontrado");
       }
@@ -106,6 +106,8 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
         roles: existRole,
       });
+
+
 
       return await this.userRepository.save(createUser);
     } catch (error: any) {
@@ -122,12 +124,12 @@ export class AuthService {
       qb.skip((page - 1) * limit).take(limit);
     }
     if (search) {
-      qb.andWhere("user.name ILIKE :search OR user.email ILIKE :search", { search: `%${search}%` });
+      qb.andWhere("user.name ILIKE :search", { search: `%${search}%` });
     }
 
     const [data, total] = await qb.getManyAndCount();
 
-   
+
     if (page && limit) {
       return {
         data,
@@ -143,8 +145,14 @@ export class AuthService {
     return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async findOne(id: string) {
+    const findUser = await this.userRepository.findOneBy({ id });
+
+    if (!findUser) {
+      throw new NotFoundException("Usuario no encontrado");
+    }
+
+    return findUser;
   }
 
   async update(id: string, updateAuthDto: UpdateAuthDto) {

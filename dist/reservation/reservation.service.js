@@ -40,6 +40,16 @@ let ReservationService = class ReservationService {
         if (!user) {
             throw new common_1.NotFoundException('Usuario no encontrado');
         }
+        const conflictRoom = this.reservationRepository.createQueryBuilder('reservation')
+            .where('reservation.roomId =:roomId', { roomId: createReservationDto.roomId })
+            .andWhere('reservation.startDate < :endDate AND reservation.endDate > :startDate', {
+            endDate: createReservationDto.endDate,
+            startDate: createReservationDto.startDate
+        });
+        const conflict = await conflictRoom.getOne();
+        if (conflict) {
+            throw new common_1.ForbiddenException('Sala no disponible en el horario seleccionado');
+        }
         const reservation = this.reservationRepository.create({
             title: createReservationDto.title,
             startDate: createReservationDto.startDate,

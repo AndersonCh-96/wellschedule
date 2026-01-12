@@ -95,20 +95,20 @@ export class AuthController {
     return this.authService.findAll(query);
   }
 
-  @Get(":id")
+  @Get("user/:id")
   @Auth(ValidRoles.admin, ValidRoles.user)
   findOne(@Param("id") id: string) {
-    return this.authService.findOne(+id);
+    return this.authService.findOne(id);
   }
 
   @Patch("user/:id")
-  @Auth(ValidRoles.admin, ValidRoles.user)
+  // @Auth(ValidRoles.admin, ValidRoles.user)
   update(@Param("id") id: string, @Body() updateAuthDto: UpdateAuthDto) {
     return this.authService.update(id, updateAuthDto);
   }
 
   @Delete("user/:id")
-  @Auth(ValidRoles.admin, ValidRoles.user)
+  // @Auth(ValidRoles.admin, ValidRoles.user)
   remove(@Param("id") id: string) {
     return this.authService.remove(id);
   }

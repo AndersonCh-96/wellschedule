@@ -52,11 +52,9 @@ let AuthService = class AuthService {
     async create(createAuthDto) {
         try {
             const { password, roles, ...rest } = createAuthDto;
-            console.log(roles);
             const existRole = await this.roleRepository.find({
                 where: { name: (0, typeorm_2.In)(roles) },
             });
-            console.log("hay", existRole);
             if (existRole.length === 0) {
                 throw new common_1.NotFoundException("Rol no encontrado");
             }
@@ -78,7 +76,7 @@ let AuthService = class AuthService {
             qb.skip((page - 1) * limit).take(limit);
         }
         if (search) {
-            qb.andWhere("user.name ILIKE :search OR user.email ILIKE :search", { search: `%${search}%` });
+            qb.andWhere("user.name ILIKE :search", { search: `%${search}%` });
         }
         const [data, total] = await qb.getManyAndCount();
         if (page && limit) {
@@ -94,8 +92,12 @@ let AuthService = class AuthService {
         }
         return data;
     }
-    findOne(id) {
-        return `This action returns a #${id} auth`;
+    async findOne(id) {
+        const findUser = await this.userRepository.findOneBy({ id });
+        if (!findUser) {
+            throw new common_1.NotFoundException("Usuario no encontrado");
+        }
+        return findUser;
     }
     async update(id, updateAuthDto) {
         const { roles, ...rest } = updateAuthDto;

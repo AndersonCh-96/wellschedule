@@ -20,6 +20,7 @@ let Reservation = class Reservation {
     endDate;
     description;
     status;
+    participants;
     room;
     user;
 };
@@ -34,10 +35,10 @@ __decorate([
 ], Reservation.prototype, "title", void 0);
 __decorate([
     (0, typeorm_1.Column)("timestamp", { nullable: false }),
-    __metadata("design:type", Date)
+    __metadata("design:type", String)
 ], Reservation.prototype, "startDate", void 0);
 __decorate([
-    (0, typeorm_1.Column)("time", { nullable: false }),
+    (0, typeorm_1.Column)("timestamp", { nullable: false }),
     __metadata("design:type", String)
 ], Reservation.prototype, "endDate", void 0);
 __decorate([
@@ -48,6 +49,10 @@ __decorate([
     (0, typeorm_1.Column)("boolean", { nullable: false, default: true }),
     __metadata("design:type", Boolean)
 ], Reservation.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], Reservation.prototype, "participants", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.reservations, { nullable: false }),
     __metadata("design:type", room_entity_1.Room)

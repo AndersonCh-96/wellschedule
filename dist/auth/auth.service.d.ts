@@ -32,7 +32,7 @@ export declare class AuthService {
             pageCount: number;
         };
     }>;
-    findOne(id: number): string;
+    findOne(id: string): Promise<User>;
     update(id: string, updateAuthDto: UpdateAuthDto): Promise<User>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
     private handleError;

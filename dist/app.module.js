@@ -27,11 +27,7 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
-                host: "localhost",
-                port: 5432,
-                username: "postgres",
-                password: "the_wellness.group2024",
-                database: "pruebas",
+                url: "postgresql://postgres:OIhSgjscRwmzvdaBtfOBvuvMQmLyzWgb@hopper.proxy.rlwy.net:44482/railway",
                 autoLoadEntities: true,
                 synchronize: true,
                 logging: false,

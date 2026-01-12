@@ -10,12 +10,15 @@ export class Reservation {
   title: string;
   @Column("timestamp", { nullable: false })
   startDate: string;
-  @Column("time", { nullable: false })
+  @Column("timestamp", { nullable: false })
   endDate: string;
   @Column("text", { nullable: true })
   description: string;
   @Column("boolean", { nullable: false, default: true })
   status: boolean;
+
+  @Column({ type: 'jsonb', nullable: true })
+  participants: any[];
 
   @ManyToOne(() => Room, (room) => room.reservations, { nullable: false })
   room: Room;
