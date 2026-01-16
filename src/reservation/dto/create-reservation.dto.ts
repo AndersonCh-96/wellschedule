@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNotEmpty, IsOptional, IsString, IsUUID, Matches } from "class-validator";
+import { IsArray, IsDate, IsDateString, IsNotEmpty, IsOptional, IsString, IsUUID, Matches } from "class-validator";
 
 export class CreateReservationDto {
 
@@ -18,6 +18,10 @@ export class CreateReservationDto {
     @IsString()
     @IsOptional()
     description?: string;
+
+    @IsArray()
+    @IsOptional()
+    participants?: any[];
 
     @IsUUID()
     @IsNotEmpty()

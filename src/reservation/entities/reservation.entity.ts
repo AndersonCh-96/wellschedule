@@ -18,7 +18,11 @@ export class Reservation {
   status: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
+
   participants: any[];
+
+  @Column({ type: 'text', nullable: true })
+  meetingId: string;
 
   @ManyToOne(() => Room, (room) => room.reservations, { nullable: false })
   room: Room;

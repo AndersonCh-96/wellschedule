@@ -3,11 +3,12 @@ import { Room } from "src/room/entities/room.entity";
 export declare class Reservation {
     id: string;
     title: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     description: string;
     status: boolean;
     participants: any[];
+    meetingId: string;
     room: Room;
     user: User;
 }
