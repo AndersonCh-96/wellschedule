@@ -35,11 +35,11 @@ __decorate([
 ], Reservation.prototype, "title", void 0);
 __decorate([
     (0, typeorm_1.Column)("timestamptz", { nullable: false }),
-    __metadata("design:type", String)
+    __metadata("design:type", Date)
 ], Reservation.prototype, "startDate", void 0);
 __decorate([
     (0, typeorm_1.Column)("timestamptz", { nullable: false }),
-    __metadata("design:type", String)
+    __metadata("design:type", Date)
 ], Reservation.prototype, "endDate", void 0);
 __decorate([
     (0, typeorm_1.Column)("text", { nullable: true }),

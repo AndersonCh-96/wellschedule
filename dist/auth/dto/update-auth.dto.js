@@ -15,6 +15,7 @@ const create_auth_dto_1 = require("./create-auth.dto");
 const class_validator_1 = require("class-validator");
 class UpdateAuthDto extends (0, mapped_types_1.PartialType)(create_auth_dto_1.CreateAuthDto) {
     roles;
+    password;
     isActive;
 }
 exports.UpdateAuthDto = UpdateAuthDto;
@@ -23,6 +24,12 @@ __decorate([
     (0, class_validator_1.ArrayMinSize)(1, { message: "Debe tener al menos un rol" }),
     __metadata("design:type", Array)
 ], UpdateAuthDto.prototype, "roles", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(6, { message: "La contraseña debe tener al menos 6 caracteres" }),
+    __metadata("design:type", String)
+], UpdateAuthDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
