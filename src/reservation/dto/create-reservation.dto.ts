@@ -23,6 +23,7 @@ export class CreateReservationDto {
     @IsOptional()
     participants?: any[];
 
+
     @IsUUID()
     @IsNotEmpty()
     roomId: string;
