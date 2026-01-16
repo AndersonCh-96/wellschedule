@@ -8,6 +8,7 @@ export declare class Reservation {
     description: string;
     status: boolean;
     participants: any[];
+    meetingId: string;
     room: Room;
     user: User;
 }

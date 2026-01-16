@@ -20,16 +20,26 @@ const Repository_1 = require("typeorm/repository/Repository");
 const room_entity_1 = require("../room/entities/room.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
 const reservation_gateway_1 = require("./reservation.gateway");
+const microsoft_graph_service_1 = require("../microsoft-graph/microsoft-graph.service");
 let ReservationService = class ReservationService {
     reservationRepository;
     roomRepository;
     userRepository;
     reservationGateway;
-    constructor(reservationRepository, roomRepository, userRepository, reservationGateway) {
+    microsoftGraphService;
+    constructor(reservationRepository, roomRepository, userRepository, reservationGateway, microsoftGraphService) {
         this.reservationRepository = reservationRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
         this.reservationGateway = reservationGateway;
+        this.microsoftGraphService = microsoftGraphService;
+    }
+    MapParticipants(participants) {
+        return participants.map(participant => ({
+            emailAddress: {
+                address: participant.email
+            }
+        }));
     }
     async create(createReservationDto, userLogin) {
         const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
@@ -50,6 +60,23 @@ let ReservationService = class ReservationService {
         if (conflict) {
             throw new common_1.ForbiddenException('Sala no disponible en el horario seleccionado');
         }
+        const event = {
+            subject: createReservationDto.title,
+            start: {
+                dateTime: createReservationDto.startDate,
+                timeZone: 'America/Guayaquil',
+            },
+            end: {
+                dateTime: createReservationDto.endDate,
+                timeZone: 'America/Guayaquil',
+            },
+            body: {
+                contentType: 'HTML',
+                content: createReservationDto.description,
+            },
+            attendees: this.MapParticipants(createReservationDto?.participants || []),
+        };
+        const result = await this.microsoftGraphService.createEvent(userLogin.email, event);
         const reservation = this.reservationRepository.create({
             title: createReservationDto.title,
             startDate: createReservationDto.startDate,
@@ -57,6 +84,8 @@ let ReservationService = class ReservationService {
             description: createReservationDto.description,
             room,
             user,
+            participants: createReservationDto?.participants || [],
+            meetingId: result.id,
         });
         const saveReservation = await this.reservationRepository.save(reservation);
         this.reservationGateway.emitCreated(saveReservation);
@@ -107,6 +136,9 @@ let ReservationService = class ReservationService {
         if (reservation.user.id !== userLogin.id) {
             throw new common_1.ForbiddenException('No tienes permiso para eliminar esta reservación');
         }
+        if (reservation.meetingId) {
+            await this.microsoftGraphService.deleteEvent(userLogin.email, reservation?.meetingId || '');
+        }
         await this.reservationRepository.delete(reservation.id);
         this.reservationGateway.emitDeleted(id);
         return {
@@ -123,6 +155,7 @@ exports.ReservationService = ReservationService = __decorate([
     __metadata("design:paramtypes", [Repository_1.Repository,
         Repository_1.Repository,
         Repository_1.Repository,
-        reservation_gateway_1.ReservationGateway])
+        reservation_gateway_1.ReservationGateway,
+        microsoft_graph_service_1.MicrosoftGraphService])
 ], ReservationService);
 //# sourceMappingURL=reservation.service.js.map

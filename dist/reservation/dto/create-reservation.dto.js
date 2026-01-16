@@ -16,6 +16,7 @@ class CreateReservationDto {
     startDate;
     endDate;
     description;
+    participants;
     roomId;
 }
 exports.CreateReservationDto = CreateReservationDto;
@@ -39,6 +40,11 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateReservationDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateReservationDto.prototype, "participants", void 0);
 __decorate([
     (0, class_validator_1.IsUUID)(),
     (0, class_validator_1.IsNotEmpty)(),

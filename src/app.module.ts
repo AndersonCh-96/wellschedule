@@ -9,6 +9,8 @@ import { CloudinaryModule } from "./cloudinary/cloudinary.module";
 import { RoomModule } from './room/room.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { WebsocketModule } from './websocket/websocket.module';
+import { MicrosoftGraphService } from './microsoft-graph/microsoft-graph.service';
+import { MicrosoftAuthService } from './microsoft-auth/microsoft-auth.service';
 
 
 @Module({
@@ -41,5 +43,6 @@ import { WebsocketModule } from './websocket/websocket.module';
     WebsocketModule,
 
   ],
+  providers: [MicrosoftGraphService, MicrosoftAuthService],
 })
 export class AppModule { }

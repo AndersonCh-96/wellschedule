@@ -18,6 +18,8 @@ const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 const room_module_1 = require("./room/room.module");
 const reservation_module_1 = require("./reservation/reservation.module");
 const websocket_module_1 = require("./websocket/websocket.module");
+const microsoft_graph_service_1 = require("./microsoft-graph/microsoft-graph.service");
+const microsoft_auth_service_1 = require("./microsoft-auth/microsoft-auth.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -41,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             reservation_module_1.ReservationModule,
             websocket_module_1.WebsocketModule,
         ],
+        providers: [microsoft_graph_service_1.MicrosoftGraphService, microsoft_auth_service_1.MicrosoftAuthService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

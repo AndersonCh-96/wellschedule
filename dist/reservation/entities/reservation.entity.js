@@ -21,6 +21,7 @@ let Reservation = class Reservation {
     description;
     status;
     participants;
+    meetingId;
     room;
     user;
 };
@@ -53,6 +54,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
     __metadata("design:type", Array)
 ], Reservation.prototype, "participants", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], Reservation.prototype, "meetingId", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.reservations, { nullable: false }),
     __metadata("design:type", room_entity_1.Room)
