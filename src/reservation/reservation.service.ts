@@ -34,7 +34,7 @@ export class ReservationService {
   }
   async create(createReservationDto: CreateReservationDto, userLogin: User) {
 
-    console.log("Crearte", createReservationDto)
+
     const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
     if (!room) {
       throw new NotFoundException('Sala no encontrada');
@@ -153,7 +153,10 @@ export class ReservationService {
       throw new ForbiddenException('No tienes permiso para eliminar esta reservación');
     }
 
-    await this.microsoftGraphService.deleteEvent(userLogin.email, reservation?.meetingId || '');
+    if (reservation.meetingId) {
+      await this.microsoftGraphService.deleteEvent(userLogin.email, reservation?.meetingId || '');
+    }
+
 
     await this.reservationRepository.delete(reservation.id);
     this.reservationGateway.emitDeleted(id)

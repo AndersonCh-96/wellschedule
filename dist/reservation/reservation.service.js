@@ -42,7 +42,6 @@ let ReservationService = class ReservationService {
         }));
     }
     async create(createReservationDto, userLogin) {
-        console.log("Crearte", createReservationDto);
         const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
         if (!room) {
             throw new common_1.NotFoundException('Sala no encontrada');
@@ -137,7 +136,9 @@ let ReservationService = class ReservationService {
         if (reservation.user.id !== userLogin.id) {
             throw new common_1.ForbiddenException('No tienes permiso para eliminar esta reservación');
         }
-        await this.microsoftGraphService.deleteEvent(userLogin.email, reservation?.meetingId || '');
+        if (reservation.meetingId) {
+            await this.microsoftGraphService.deleteEvent(userLogin.email, reservation?.meetingId || '');
+        }
         await this.reservationRepository.delete(reservation.id);
         this.reservationGateway.emitDeleted(id);
         return {
