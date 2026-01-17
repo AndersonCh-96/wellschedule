@@ -10,7 +10,18 @@ export declare class ReservationController {
         data: import("./entities/reservation.entity").Reservation[];
     }>;
     findOne(id: string): Promise<import("./entities/reservation.entity").Reservation>;
-    update(id: string, updateReservationDto: UpdateReservationDto): Promise<import("./entities/reservation.entity").Reservation>;
+    update(id: string, updateReservationDto: UpdateReservationDto, user: User): Promise<{
+        meetingId: any;
+        id: string;
+        title: string;
+        startDate: Date;
+        endDate: Date;
+        description: string;
+        status: boolean;
+        participants: any[];
+        room: import("../room/entities/room.entity").Room;
+        user: User;
+    } & import("./entities/reservation.entity").Reservation>;
     remove(id: string, user: User): Promise<{
         message: string;
     }>;

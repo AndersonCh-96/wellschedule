@@ -30,6 +30,10 @@ let MicrosoftGraphService = class MicrosoftGraphService {
         const client = await this.getClient();
         return client.api(`/users/${userEmail}/calendar/events`).query({ sendUpdates: 'all' }).post(event);
     }
+    async updateEvent(userEmail, eventId, event) {
+        const client = await this.getClient();
+        return client.api(`/users/${userEmail}/events/${eventId}`).query({ sendUpdates: 'all' }).update(event);
+    }
     async deleteEvent(userEmail, eventId) {
         const client = await this.getClient();
         return client.api(`/users/${userEmail}/events/${eventId}`).query({ sendUpdates: 'all' }).delete();

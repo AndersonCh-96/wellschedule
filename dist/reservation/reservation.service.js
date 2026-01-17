@@ -38,7 +38,8 @@ let ReservationService = class ReservationService {
         return participants.map(participant => ({
             emailAddress: {
                 address: participant.email
-            }
+            },
+            type: 'required'
         }));
     }
     async create(createReservationDto, userLogin) {
@@ -119,7 +120,7 @@ let ReservationService = class ReservationService {
         }
         return reservation;
     }
-    async update(id, updateReservationDto) {
+    async update(id, updateReservationDto, userLogin) {
         const entryData = await this.reservationRepository.preload({
             id,
             ...updateReservationDto,
@@ -127,7 +128,29 @@ let ReservationService = class ReservationService {
         if (!entryData) {
             throw new common_1.NotFoundException('Reservación no encontrada');
         }
-        return await this.reservationRepository.save(entryData);
+        console.log("entra", entryData);
+        const event = {
+            subject: updateReservationDto.title,
+            isDraft: false,
+            start: {
+                dateTime: updateReservationDto.startDate,
+                timeZone: 'America/Guayaquil',
+            },
+            end: {
+                dateTime: updateReservationDto.endDate,
+                timeZone: 'America/Guayaquil',
+            },
+            body: {
+                contentType: 'HTML',
+                content: updateReservationDto.description,
+            },
+            attendees: this.MapParticipants(updateReservationDto?.participants || []),
+        };
+        const result = await this.microsoftGraphService.updateEvent(userLogin.email, entryData?.meetingId || '', event);
+        return await this.reservationRepository.save({
+            ...entryData,
+            meetingId: result.id,
+        });
     }
     async remove(id, userLogin) {
         const reservation = await this.reservationRepository.findOne({ where: { id }, relations: ['user'] });

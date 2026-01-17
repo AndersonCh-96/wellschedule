@@ -34,8 +34,8 @@ let ReservationController = class ReservationController {
     findOne(id) {
         return this.reservationService.findOne(id);
     }
-    update(id, updateReservationDto) {
-        return this.reservationService.update(id, updateReservationDto);
+    update(id, updateReservationDto, user) {
+        return this.reservationService.update(id, updateReservationDto, user);
     }
     remove(id, user) {
         return this.reservationService.remove(id, user);
@@ -68,10 +68,12 @@ __decorate([
 ], ReservationController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, auth_decorator_1.Auth)(),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, get_user_decorator_1.GetUserDec)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_reservation_dto_1.UpdateReservationDto]),
+    __metadata("design:paramtypes", [String, update_reservation_dto_1.UpdateReservationDto, user_entity_1.User]),
     __metadata("design:returntype", void 0)
 ], ReservationController.prototype, "update", null);
 __decorate([

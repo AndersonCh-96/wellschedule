@@ -19,7 +19,7 @@ export class Reservation {
 
   @Column({ type: 'jsonb', nullable: true })
 
-  participants: any[];
+  participants: any[]
 
   @Column({ type: 'text', nullable: true })
   meetingId: string;

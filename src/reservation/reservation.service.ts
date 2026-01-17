@@ -25,15 +25,15 @@ export class ReservationService {
   }
 
 
-  private MapParticipants(participants: { email: string }[]) {
+  private MapParticipants(participants: { email: string[] }[]) {
     return participants.map(participant => ({
       emailAddress: {
-        address: participant
-      }
+        address: participant.email
+      },
+      type: 'required'
     }));
   }
   async create(createReservationDto: CreateReservationDto, userLogin: User) {
-
 
     const room = await this.roomRepository.findOne({ where: { id: createReservationDto.roomId } });
     if (!room) {
@@ -75,12 +75,14 @@ export class ReservationService {
       attendees: this.MapParticipants(createReservationDto?.participants || []),
     };
 
+
+
     const result = await this.microsoftGraphService.createEvent(
       userLogin.email,
       event
     )
 
-    console.log("Result", result);
+
 
     const reservation = this.reservationRepository.create({
       title: createReservationDto.title,
@@ -134,7 +136,9 @@ export class ReservationService {
     return reservation;
   }
 
-  async update(id: string, updateReservationDto: UpdateReservationDto) {
+  async update(id: string, updateReservationDto: UpdateReservationDto, userLogin: User) {
+
+
 
     const entryData = await this.reservationRepository.preload({
       id,
@@ -144,7 +148,34 @@ export class ReservationService {
       throw new NotFoundException('Reservación no encontrada');
     }
 
-    return await this.reservationRepository.save(entryData);
+    console.log("entra", entryData)
+
+    const event = {
+
+      subject: updateReservationDto.title,
+      isDraft: false,
+      start: {
+        dateTime: updateReservationDto.startDate,
+        timeZone: 'America/Guayaquil',
+      },
+      end: {
+        dateTime: updateReservationDto.endDate,
+        timeZone: 'America/Guayaquil',
+      },
+      body: {
+        contentType: 'HTML',
+        content: updateReservationDto.description,
+      },
+      attendees: this.MapParticipants(updateReservationDto?.participants || []),
+    };
+
+
+    const result = await this.microsoftGraphService.updateEvent(userLogin.email, entryData?.meetingId || '', event)
+
+    return await this.reservationRepository.save({
+      ...entryData,
+      meetingId: result.id,
+    });
   }
 
   async remove(id: string, userLogin: User) {

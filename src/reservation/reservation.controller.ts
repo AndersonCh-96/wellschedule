@@ -27,8 +27,9 @@ export class ReservationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-    return this.reservationService.update(id, updateReservationDto);
+  @Auth()
+  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto, @GetUserDec() user: User) {
+    return this.reservationService.update(id, updateReservationDto, user);
   }
 
   @Delete(':id')

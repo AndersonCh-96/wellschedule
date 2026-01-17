@@ -21,6 +21,11 @@ export class MicrosoftGraphService {
         return client.api(`/users/${userEmail}/calendar/events`).query({ sendUpdates: 'all' }).post(event);
     }
 
+    async updateEvent(userEmail: string, eventId: string, event: any) {
+        const client = await this.getClient();
+        return client.api(`/users/${userEmail}/events/${eventId}`).query({ sendUpdates: 'all' }).update(event);
+    }
+
     async deleteEvent(userEmail: string, eventId: string) {
         const client = await this.getClient();
         return client.api(`/users/${userEmail}/events/${eventId}`).query({ sendUpdates: 'all' }).delete();

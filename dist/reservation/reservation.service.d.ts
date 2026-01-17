@@ -19,7 +19,18 @@ export declare class ReservationService {
         data: Reservation[];
     }>;
     findOne(id: string): Promise<Reservation>;
-    update(id: string, updateReservationDto: UpdateReservationDto): Promise<Reservation>;
+    update(id: string, updateReservationDto: UpdateReservationDto, userLogin: User): Promise<{
+        meetingId: any;
+        id: string;
+        title: string;
+        startDate: Date;
+        endDate: Date;
+        description: string;
+        status: boolean;
+        participants: any[];
+        room: Room;
+        user: User;
+    } & Reservation>;
     remove(id: string, userLogin: User): Promise<{
         message: string;
     }>;
