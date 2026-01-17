@@ -28,7 +28,7 @@ export class ReservationService {
   private MapParticipants(participants: { email: string }[]) {
     return participants.map(participant => ({
       emailAddress: {
-        address: participant.email
+        address: participant
       }
     }));
   }
