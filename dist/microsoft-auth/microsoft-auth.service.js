@@ -8,54 +8,43 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var MicrosoftAuthService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MicrosoftAuthService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const axios_1 = require("axios");
-let MicrosoftAuthService = MicrosoftAuthService_1 = class MicrosoftAuthService {
+let MicrosoftAuthService = class MicrosoftAuthService {
     configService;
     token;
     expiresAt;
-    logger = new common_1.Logger(MicrosoftAuthService_1.name);
     constructor(configService) {
         this.configService = configService;
     }
     async getToken() {
-        if (this.token && Date.now() < this.expiresAt - 60000) {
+        if (this.token && Date.now() < this.expiresAt) {
             return this.token;
         }
-        try {
-            const clientId = this.configService.get('GRAPH_CLIENT_ID');
-            const clientSecret = this.configService.get('GRAPH_CLIENT_SECRET');
-            const scope = this.configService.get('GRAPH_SCOPE');
-            const tenantId = this.configService.get('GRAPH_TENANT_ID');
-            if (!clientId || !clientSecret || !scope || !tenantId) {
-                throw new Error('Variables de entorno faltantes');
-            }
-            const url = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
-            const params = new URLSearchParams({
-                client_id: clientId,
-                client_secret: clientSecret,
-                scope: scope,
-                grant_type: 'client_credentials'
-            });
-            const response = await axios_1.default.post(url, params, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            });
-            this.token = response.data.access_token;
-            this.expiresAt = Date.now() + (response.data.expires_in * 1000);
-            return this.token;
+        const clientId = this.configService.get('GRAPH_CLIENT_ID');
+        const clientSecret = this.configService.get('GRAPH_CLIENT_SECRET');
+        const scope = this.configService.get('GRAPH_SCOPE');
+        if (!clientId || !clientSecret || !scope) {
+            throw new Error('Variables de entorno faltantes');
         }
-        catch (error) {
-            this.logger.error('Error obteniendo token de Microsoft', error);
-            throw error;
-        }
+        const url = `https://login.microsoftonline.com/${this.configService.get('GRAPH_TENANT_ID')}/oauth2/v2.0/token`;
+        const params = new URLSearchParams({
+            client_id: clientId,
+            client_secret: clientSecret,
+            scope: scope,
+            grant_type: 'client_credentials'
+        });
+        const response = await axios_1.default.post(url, params);
+        this.token = response.data.access_token;
+        this.expiresAt = Date.now() + response.data.expires_in * 1000;
+        return this.token;
     }
 };
 exports.MicrosoftAuthService = MicrosoftAuthService;
-exports.MicrosoftAuthService = MicrosoftAuthService = MicrosoftAuthService_1 = __decorate([
+exports.MicrosoftAuthService = MicrosoftAuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService])
 ], MicrosoftAuthService);

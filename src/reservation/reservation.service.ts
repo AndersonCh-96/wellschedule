@@ -57,7 +57,9 @@ export class ReservationService {
     }
 
     const event = {
+    
       subject: createReservationDto.title,
+      isDraft: false,
       start: {
         dateTime: createReservationDto.startDate,
         timeZone: 'America/Guayaquil',
