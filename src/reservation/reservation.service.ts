@@ -57,7 +57,7 @@ export class ReservationService {
     }
 
     const event = {
-    
+
       subject: createReservationDto.title,
       isDraft: false,
       start: {
@@ -79,6 +79,8 @@ export class ReservationService {
       userLogin.email,
       event
     )
+
+    console.log("Result", result);
 
     const reservation = this.reservationRepository.create({
       title: createReservationDto.title,
