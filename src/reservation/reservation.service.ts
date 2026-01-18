@@ -59,6 +59,9 @@ export class ReservationService {
     const event = {
 
       subject: createReservationDto.title,
+      location: {
+        displayName: room.name
+      },
       isDraft: false,
       start: {
         dateTime: createReservationDto.startDate,
@@ -138,6 +141,13 @@ export class ReservationService {
 
   async update(id: string, updateReservationDto: UpdateReservationDto, userLogin: User) {
 
+    const room = await this.roomRepository.findOne({
+      where: { id: updateReservationDto.roomId }
+    })
+    if (!room) {
+      throw new NotFoundException('Sala no encontrada');
+    }
+
 
 
     const entryData = await this.reservationRepository.preload({
@@ -148,11 +158,13 @@ export class ReservationService {
       throw new NotFoundException('Reservación no encontrada');
     }
 
-    console.log("entra", entryData)
 
     const event = {
 
       subject: updateReservationDto.title,
+      location: {
+        displayName: room.name
+      },
       isDraft: false,
       start: {
         dateTime: updateReservationDto.startDate,
