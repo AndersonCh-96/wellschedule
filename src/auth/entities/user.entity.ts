@@ -36,7 +36,7 @@ export class User {
   isActive: boolean;
 
 
-  @Column("string", { nullable: true })
+  @Column("text", { nullable: true })
   photoUrl: string;
 
   @CreateDateColumn()
