@@ -17,6 +17,7 @@ import { LoginUserDTO } from "./dto/login-user.dto";
 import { JwtService } from "@nestjs/jwt";
 import { JwPayload } from "./interfaces/jwt.interface";
 import { PaginationUserDto } from "./dto/paginatio.dto";
+import { PaginationDto } from "src/roles/dto/paginate.dto";
 
 @Injectable()
 export class AuthService {
@@ -115,34 +116,33 @@ export class AuthService {
     }
   }
 
-  async findAll({ page, limit, search }: PaginationUserDto) {
+  async findAll({ page, limit }: PaginationDto) {
 
     const qb = this.userRepository.createQueryBuilder("user").
       leftJoinAndSelect("user.roles", "role").orderBy("user.name", "ASC");
 
+
+
     if (page && limit) {
       qb.skip((page - 1) * limit).take(limit);
-    }
-    if (search) {
-      qb.andWhere("user.name ILIKE :search", { search: `%${search}%` });
     }
 
     const [data, total] = await qb.getManyAndCount();
 
 
-    if (page && limit) {
-      return {
-        data,
-        meta: {
-          total,
-          page,
-          pageSize: limit,
-          pageCount: Math.ceil(total / limit)
-        }
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        pageSize: limit,
+        pageCount: Math.ceil(total / (limit || 1))
       }
+
     }
 
-    return data;
+
   }
 
   async findOne(id: string) {
