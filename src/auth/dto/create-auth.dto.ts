@@ -18,6 +18,9 @@ export class CreateAuthDto {
   @IsOptional()
   name?: string;
 
+  @IsOptional()
+  photoUrl?: string;
+
   @IsNotEmpty()
   @IsString()
   @MinLength(6, { message: "La contraseña debe tener al menos 6 caracteres" })
