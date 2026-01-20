@@ -64,6 +64,7 @@ export class AuthService {
       where: { email: user.email },
       select: {
         email: true,
+        photoUrl: true,
         password: true,
         id: true,
         roles: true,
