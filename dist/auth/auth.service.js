@@ -33,7 +33,9 @@ let AuthService = class AuthService {
         const findUser = await this.userRepository.findOne({
             where: { email: user.email },
             select: {
+                name: true,
                 email: true,
+                photoUrl: true,
                 password: true,
                 id: true,
                 roles: true,

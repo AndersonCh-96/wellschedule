@@ -102,7 +102,7 @@ let ReservationService = class ReservationService {
             .leftJoinAndSelect("reservation.room", "room")
             .leftJoinAndSelect("reservation.user", "user")
             .where("reservation.status = :status", { status: true })
-            .take(10).orderBy("reservation.startDate", "DESC");
+            .take(30).orderBy("reservation.startDate", "DESC");
         if (start && end) {
             queryB.andWhere("reservation.startDate BETWEEN :start AND :end", {
                 start: new Date(start),
